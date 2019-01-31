@@ -11,6 +11,12 @@ ACCESS_TOKEN = 'ACCESS_TOKEN'
 VERIFY_TOKEN = 'VERIFY_TOKEN'
 bot = Bot(ACCESS_TOKEN)
 
+#CalculatorRecogValues
+ADD = ['+', 'plus', 'added']
+SUBTRACT = ['-', 'minus', 'subtracted']
+MULTIPLY = ['x', 'times', 'multiplied']
+DIVIDE = ['/', 'divided']
+
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
 def receive_message():
@@ -47,13 +53,14 @@ def verify_fb_token(token_sent):
         return request.args.get("hub.challenge")
     return 'Invalid verification token'
 
-
 #chooses a random message to send to the user
 def get_message_type(userMessage):
     if 'joke' in userMessage:
         response = joke_request()
     elif 'quote' in userMessage:
         response = quote_request()
+    elif self.ADD in userMessage:
+        response = calculator_request(add, userMessage)
     else:
         response = 'Please Try Again'
     # return selected item to the user
@@ -64,6 +71,10 @@ def send_message(recipient_id, response):
     #sends user the text message provided via input response parameter
     bot.send_text_message(recipient_id, response)
     return "success"
+
+def calculator_request(operationType, userMessage):
+	return "Adding"
+
 
 def joke_request():
     jokes = [

@@ -59,8 +59,6 @@ def get_message_type(userMessage):
         response = joke_request()
     elif 'quote' in userMessage:
         response = quote_request()
-    elif ADD in userMessage:
-        response = calculator_request(add, userMessage)
     else:
         response = 'Please Try Again'
     # return selected item to the user

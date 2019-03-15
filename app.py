@@ -61,15 +61,6 @@ def get_message_type(userMessage):
         response = joke_request()
     elif 'quote' in userMessage:
         response = quote_request()
-    elif 'gif' in userMessage:	
-	if(len(userMessage[4:])<2):
-         response = "Enter a longer search phrase :)"
-        else:
-         if gif_search(userMessage[4:]) == False:
-          response = "No GIFs available for that :( "
-         else:
-          response = "GIF FOUND"	
-          # bot.send_image_url(sender_id, gif_search(messaging_text[4:]))
     else:
         response = 'Please Try Again'
     # return selected item to the user

@@ -2,6 +2,8 @@
 #Python libraries that we need to import for our bot
 import logging
 import random
+import json
+import requests
 import os
 from flask import Flask, request
 from pymessenger.bot import Bot
@@ -59,6 +61,15 @@ def get_message_type(userMessage):
         response = joke_request()
     elif 'quote' in userMessage:
         response = quote_request()
+    elif 'gif' in userMessage:	
+	if(len(userMessage[4:])<2):
+         response = "Enter a longer search phrase :)"
+        else:
+         if gif_search(userMessage[4:]) == False:
+          response = "No GIFs available for that :( "
+         else:
+          response = "GIF FOUND"	
+          # bot.send_image_url(sender_id, gif_search(messaging_text[4:]))
     else:
         response = 'Please Try Again'
     # return selected item to the user
@@ -223,5 +234,14 @@ def quote_request():
       ]
     return random.choice(quote)
 
+def gif_search(message_text):
+	search_phrase = message_text.replace(" ", "-")
+	url = "http://api.giphy.com/v1/gifs/search?q=" + search_phrase + "&api_key=dc6zaTOxFJmzC&limit=5&rating=pg-13"
+	response = requests.get(url)
+	obj = response.json()
+	if(len(obj["data"])>=1):
+		return (obj["data"][randint(0,len(obj["data"])-1)]["images"]["original"]["url"])
+	else:
+		return False
 if __name__ == "__main__":
     app.run()
